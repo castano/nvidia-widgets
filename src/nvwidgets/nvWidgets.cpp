@@ -818,10 +818,10 @@ bool UIContext::isHover(const Rect & rect)
     return overlap(rect, m_currentCursor);
 }
 
-/*
-void UIContext::doTextureView(  const Rect & r, const void* texID, Rect & zoomRect, int mipLevel, 
-                                const nv::vec4f& texelScale, const nv::vec4f& texelOffset, const nv::vec4i& texelSwizzling, 
-                                int style)
+
+void UIContext::doTextureView(const Rect & r, const void* texID, Rect & zoomRect, int mipLevel,
+							  float texelScale, float texelOffset, int red, int green, int blue, int alpha,
+                              int style)
 {
     Rect rt;
     Rect rect = placeRect(m_painter->getTextureViewRect(r, rt));
@@ -829,6 +829,6 @@ void UIContext::doTextureView(  const Rect & r, const void* texID, Rect & zoomRe
     if ((zoomRect.w == 0) || (zoomRect.h == 0))
         zoomRect = Rect( 0, 0, rt.w, rt.h);
 
-    m_painter->drawTextureView( rect, texID, rt, zoomRect, mipLevel, texelScale, texelOffset, texelSwizzling, style );
+    m_painter->drawTextureView( rect, texID, rt, zoomRect, mipLevel, texelScale, texelOffset, red, green, blue, alpha, style );
 }
-*/
+
