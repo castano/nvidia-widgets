@@ -203,9 +203,9 @@ namespace nv
         NVSDKENTRY virtual void drawPanel(const Rect & rect, const char * text, const Rect & rt, const Rect & ra, bool isUnfold, bool isHover, bool isFocus, int style) = 0;
 
         NVSDKENTRY virtual Rect getTextureViewRect(const Rect & rect, Rect& rt) const = 0;
-//        NVSDKENTRY virtual void drawTextureView(const Rect & rect, const void* texID, const Rect& rt, const Rect & rz, int mipLevel, 
-//                                                const nv::vec4f& texelScale, const nv::vec4f& texelOffset, const nv::vec4i& texelSwizzling,
-//                                                int style) = 0;
+        NVSDKENTRY virtual void drawTextureView(const Rect & rect, const void* texID, const Rect& rt, const Rect & rz, int mipLevel, 
+                                                float texelScale, float texelOffset, int r, int g, int b, int a, 
+                                                int style) = 0;
 
         // Eval widget dimensions
         NVSDKENTRY virtual int getCanvasMargin() const = 0;
@@ -389,12 +389,11 @@ namespace nv
         // texelSwizzling - swizzle applyed to the texel (after scale and offset)
         // style - optional style flag to modify the look
         //////////////////////////////////////////////////////////////////
-/*        NVSDKENTRY void doTextureView(  const Rect & rect, const void* texID, Rect & zoomRect, int mipLevel = -1, 
-                                        const nv::vec4f& texelScale = nv::vec4f(1.0, 1.0, 1.0, 1.0), 
-                                        const nv::vec4f& texelOffset = nv::vec4f(0.0, 0.0, 0.0, 0.0), 
-                                        const nv::vec4i& texelSwizzling = nv::vec4i(0, 1, 2, 3),
+        NVSDKENTRY void doTextureView(  const Rect & rect, const void* texID, Rect & zoomRect, int mipLevel = -1, 
+										float texelScale = 1.0f, float texelOffset = 1.0f, 
+										int red = 0, int green = 1, int blue = 2, int alpha = 3, 
                                         int style = 0);
-*/
+
     protected:
         NVSDKENTRY UIPainter* getPainter() { return m_painter; }
 

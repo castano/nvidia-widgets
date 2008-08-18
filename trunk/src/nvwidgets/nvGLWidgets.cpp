@@ -10,17 +10,71 @@
 
 #include "nvGLWidgets.h"
 
-//#include <GL/glew.h>
+#include <GL/glew.h>
 
 #define NV_REPORT_COMPILE_ERRORS
-#include "nvShaderUtils.h"
+#include <nvglutils/nvShaderUtils.h>
 
+#include <math.h> // sqrtf
+#include <stdlib.h> // exit (required by glut.h)
 #include <GL/glut.h> // glutBitmapWidth, glutBitmapCharacter
 #include <string.h> // strlen
 
 using namespace nv;
 
-#define norm255( i ) ( (float) ( i ) / 255.0 )
+#define norm255( i ) ( (float) ( i ) / 255.0f )
+
+enum Color
+{
+    cBase = 0,
+    cBool = 4,
+    cOutline = 8,
+    cFont = 12,
+    cFontBack = 16,
+    cTranslucent = 20,
+    cNbColors = 24,
+};
+
+const static float s_colors[cNbColors][4] =
+{
+	// cBase
+	{ norm255(89), norm255(89), norm255(89), 0.7f },
+	{ norm255(166), norm255(166), norm255(166), 0.8f },
+	{ norm255(212), norm255(228), norm255(60), 0.5f },
+	{ norm255(227), norm255(237), norm255(127), 0.5f },
+
+    // cBool
+    { norm255(99), norm255(37), norm255(35), 1.0f },
+    { norm255(149), norm255(55), norm255(53), 1.0f },
+    { norm255(212), norm255(228), norm255(60), 1.0f },
+    { norm255(227), norm255(237), norm255(127), 1.0f },
+
+    // cOutline
+    { norm255(255), norm255(255), norm255(255), 1.0f },
+	{ norm255(255), norm255(255), norm255(255), 1.0f },
+	{ norm255(255), norm255(255), norm255(255), 1.0f },
+	{ norm255(255), norm255(255), norm255(255), 1.0f },
+
+    // cFont
+    { norm255(255), norm255(255), norm255(255), 1.0f },
+	{ norm255(255), norm255(255), norm255(255), 1.0f },
+	{ norm255(255), norm255(255), norm255(255), 1.0f },
+	{ norm255(255), norm255(255), norm255(255), 1.0f },
+
+    // cFontBack
+    { norm255(79), norm255(129), norm255(189), 1.0 },
+    { norm255(79), norm255(129), norm255(189), 1.0 },
+    { norm255(128), norm255(100), norm255(162), 1.0 },
+    { norm255(128), norm255(100), norm255(162), 1.0 },
+    
+    // cTranslucent
+    { norm255(0), norm255(0), norm255(0), 0.0 },
+	{ norm255(0), norm255(0), norm255(0), 0.0 },
+	{ norm255(0), norm255(0), norm255(0), 0.0 },
+	{ norm255(0), norm255(0), norm255(0), 0.0 },
+};
+    
+
 
 template <typename T> T max(const T & a, const T & b)
 {
@@ -64,8 +118,8 @@ const char* cWidgetFSSource = {
 const char* cTexViewWidgetFSSource = {
     "#version 120\n\
     uniform float mipLevel /*= 0*/;\n\
-    uniform vec4 texelScale /*= vec4( 1.0, 1.0, 1.0, 1.0)*/;\n\
-    uniform vec4 texelOffset /*= vec4( 0.0, 0.0, 0.0, 0.0)*/;\n\
+    uniform float texelScale /*= 1.0*/;\n\
+    uniform float texelOffset /*= 0.0*/;\n\
     uniform ivec4 texelSwizzling /*= ivec4( 0, 1, 2, 3)*/;\n\
     uniform sampler2D samp;\n\
     \n\
@@ -104,41 +158,6 @@ GLUIPainter::GLUIPainter():
     m_texelOffsetUniform(0),
     m_texelSwizzlingUniform(0)
 {
-    int nb = cBase;
-    
-    // std
-    m_colors[nb++] = { norm255(89), norm255(89), norm255(89), 0.7 };
-    m_colors[nb++] = { norm255(166), norm255(166), norm255(166), 0.8 };
-    m_colors[nb++] = { norm255(212), norm255(228), norm255(60), 0.5 }; 
-    m_colors[nb++] = { norm255(227), norm255(237), norm255(127), 0.5 };
-//    m_colors[nb++]  = { norm255(185), norm255(202), norm255(28), 0.5 };
-//   m_colors[nb++]  = { norm255(212), norm255(228), norm255(60), 0.5 };
-    
-    // bool
-    nb = cBool;
-    m_colors[nb++] = { norm255(99), norm255(37), norm255(35), 1.0 }; 
-    m_colors[nb++] = { norm255(149), norm255(55), norm255(53), 1.0 }; 
-    m_colors[nb++] = { norm255(212), norm255(228), norm255(60), 1.0 }; 
-    m_colors[nb++] = { norm255(227), norm255(237), norm255(127), 1.0 }; 
-
-    // Outline
-    nb = cOutline;
-    m_colors[nb++] = { norm255(255), norm255(255), norm255(255), 1.0 }; 
-
-    // font
-    nb = cFont;
-    m_colors[nb++] = { norm255(255), norm255(255), norm255(255), 1.0 }; 
-   
-    // font back
-    nb = cFontBack;
-    nb++;
-    m_colors[nb++] = { norm255(79), norm255(129), norm255(189), 1.0 }; 
-    m_colors[nb++] = { norm255(128), norm255(100), norm255(162), 1.0 }; 
-    m_colors[nb++] = { norm255(128), norm255(100), norm255(162), 1.0 }; 
-    
-    // Translucent
-    nb = cTranslucent;
-    m_colors[nb] = { norm255(0), norm255(0), norm255(0), 0.0 }; 
 }
 
 int getWidgetMargin() 
@@ -202,13 +221,13 @@ int GLUIPainter::getTextSize(const char * text, int& nbLines) const
         else
         {
             nbLines++;
-            w = std::max(w, wLine);
+            w = max(w, wLine);
             wLine = 0;
         }
 
         text++;
     }
-    w = std::max(w, wLine) + 2;
+    w = max(w, wLine) + 2;
 
     return w;
 }
@@ -302,7 +321,7 @@ Rect GLUIPainter::getLineEditRect(const Rect & r, const char * text, Rect & rt) 
 
     if (rect.w == 0)
     {
-        rt.w = std::max(getTextLineWidth(text), 100);
+        rt.w = max(getTextLineWidth(text), 100);
         rect.w = rt.w + 2*rt.x;
     }
     else
@@ -693,8 +712,8 @@ Rect GLUIPainter::getTextureViewRect(const Rect & r, Rect& rt) const
     return rect;
 }
 
-/*void GLUIPainter::drawTextureView(const Rect & rect, const void* texID, const Rect& rt, const Rect & rz, int mipLevel, 
-                                  const nv::vec4f& texelScale, const nv::vec4f& texelOffset, const nv::vec4i& texelSwizzling,
+void GLUIPainter::drawTextureView(const Rect & rect, const void* texID, const Rect& rt, const Rect & rz, int mipLevel, 
+                                  float texelScale, float texelOffset, int r, int g, int b, int a, 
                                   int style)
 {
     drawFrame( rect, Point(rt.x, rt.y), false, false, false );
@@ -707,9 +726,9 @@ Rect GLUIPainter::getTextureViewRect(const Rect & r, Rect& rt) const
 
     glUseProgram(m_textureViewProgram);
     glUniform1f( m_texMipLevelUniform, (float) mipLevel);
-    glUniform4fv( m_texelScaleUniform, 1, texelScale);
-    glUniform4fv( m_texelOffsetUniform, 1, texelOffset);
-    glUniform4iv( m_texelSwizzlingUniform, 1, texelSwizzling);
+    glUniform1f( m_texelScaleUniform, texelScale);
+    glUniform1f( m_texelOffsetUniform, texelOffset);
+    glUniform4i( m_texelSwizzlingUniform, r, g, b, a);
 
 
     glBegin(GL_QUADS);
@@ -727,7 +746,7 @@ Rect GLUIPainter::getTextureViewRect(const Rect & r, Rect& rt) const
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
 }
-*/
+
 
 void GLUIPainter::init()
 {
@@ -888,8 +907,8 @@ void GLUIPainter::drawRect( const Rect & rect, int fillColorId, int borderColorI
 {
     glUseProgram(m_widgetProgram);
 
-    glUniform4fv( m_fillColorUniform, 1, m_colors[fillColorId]);
-    glUniform4fv( m_borderColorUniform, 1, m_colors[borderColorId]);
+    glUniform4fv( m_fillColorUniform, 1, s_colors[fillColorId]);
+    glUniform4fv( m_borderColorUniform, 1, s_colors[borderColorId]);
     glUniform2f( m_zonesUniform, 0, 0);
 
     float x0 = rect.x;
@@ -914,8 +933,8 @@ void GLUIPainter::drawRect( const Rect & rect, int fillColorId, int borderColorI
 void GLUIPainter::drawRoundedRect( const Rect& rect, const Point& corner, int fillColorId, int borderColorId ) const
 {
     glUseProgram(m_widgetProgram);
-    glUniform4fv( m_fillColorUniform, 1, m_colors[fillColorId]);
-    glUniform4fv( m_borderColorUniform, 1, m_colors[borderColorId]);
+    glUniform4fv( m_fillColorUniform, 1, s_colors[fillColorId]);
+    glUniform4fv( m_borderColorUniform, 1, s_colors[borderColorId]);
     glUniform2f( m_zonesUniform, corner.x - 1, corner.x - 2);
 
     float xb = corner.x;
@@ -1001,8 +1020,8 @@ void GLUIPainter::drawRoundedRect( const Rect& rect, const Point& corner, int fi
 void GLUIPainter::drawRoundedRectOutline( const Rect& rect, const Point& corner, int borderColorId ) const
 {
     glUseProgram(m_widgetProgram);
-    glUniform4fv( m_fillColorUniform, 1, m_colors[cTranslucent]);
-    glUniform4fv( m_borderColorUniform, 1, m_colors[borderColorId]);
+    glUniform4fv( m_fillColorUniform, 1, s_colors[cTranslucent]);
+    glUniform4fv( m_borderColorUniform, 1, s_colors[borderColorId]);
     glUniform2f( m_zonesUniform, corner.x - 1, corner.x - 2);
 
     float xb = corner.x;
@@ -1090,8 +1109,8 @@ void GLUIPainter::drawCircle( const Rect& rect, int fillColorId, int borderColor
 {
     glUseProgram(m_widgetProgram);
     
-    glUniform4fv( m_fillColorUniform, 1, m_colors[fillColorId]);
-    glUniform4fv( m_borderColorUniform, 1, m_colors[borderColorId]);
+    glUniform4fv( m_fillColorUniform, 1, s_colors[fillColorId]);
+    glUniform4fv( m_borderColorUniform, 1, s_colors[borderColorId]);
     glUniform2f( m_zonesUniform, (rect.w / 2) - 1, (rect.w / 2) - 2);
 
 
@@ -1120,7 +1139,7 @@ void GLUIPainter::drawCircle( const Rect& rect, int fillColorId, int borderColor
 
 void GLUIPainter::drawMinus( const Rect& rect, int width, int fillColorId, int borderColorId ) const
 {
-    float offset = sqrt(2.0)/2.0 ;
+    float offset = sqrtf(2.0f) / 2.0f;
    
     float xb = width;
     float yb = width;
@@ -1135,8 +1154,8 @@ void GLUIPainter::drawMinus( const Rect& rect, int width, int fillColorId, int b
 
     glUseProgram(m_widgetProgram);
     
-    glUniform4fv( m_fillColorUniform, 1, m_colors[fillColorId]);
-    glUniform4fv( m_borderColorUniform, 1, m_colors[borderColorId]);
+    glUniform4fv( m_fillColorUniform, 1, s_colors[fillColorId]);
+    glUniform4fv( m_borderColorUniform, 1, s_colors[borderColorId]);
     glUniform2f( m_zonesUniform, (xb) - 1, (xb) - 2);
 
     glBegin(GL_TRIANGLE_STRIP);
@@ -1184,8 +1203,8 @@ void GLUIPainter::drawPlus( const Rect& rect, int width, int fillColorId, int bo
 
     glUseProgram(m_widgetProgram);
     
-    glUniform4fv( m_fillColorUniform, 1, m_colors[fillColorId]);
-    glUniform4fv( m_borderColorUniform, 1, m_colors[borderColorId]);
+    glUniform4fv( m_fillColorUniform, 1, s_colors[fillColorId]);
+    glUniform4fv( m_borderColorUniform, 1, s_colors[borderColorId]);
     glUniform2f( m_zonesUniform, (xb) - 1, (xb) - 2);
 
  /*   glBegin(GL_TRIANGLE_STRIP);
@@ -1296,8 +1315,8 @@ void GLUIPainter::drawDownArrow( const Rect& rect, int width, int fillColorId, i
 
     glUseProgram(m_widgetProgram);
     
-    glUniform4fv( m_fillColorUniform, 1, m_colors[fillColorId]);
-    glUniform4fv( m_borderColorUniform, 1, m_colors[borderColorId]);
+    glUniform4fv( m_fillColorUniform, 1, s_colors[fillColorId]);
+    glUniform4fv( m_borderColorUniform, 1, s_colors[borderColorId]);
     glUniform2f( m_zonesUniform, (xb) - 1, (xb) - 2);
 
     glBegin(GL_TRIANGLE_STRIP);
@@ -1365,8 +1384,8 @@ void GLUIPainter::drawUpArrow( const Rect& rect, int width, int fillColorId, int
 
     glUseProgram(m_widgetProgram);
     
-    glUniform4fv( m_fillColorUniform, 1, m_colors[fillColorId]);
-    glUniform4fv( m_borderColorUniform, 1, m_colors[borderColorId]);
+    glUniform4fv( m_fillColorUniform, 1, s_colors[fillColorId]);
+    glUniform4fv( m_borderColorUniform, 1, s_colors[borderColorId]);
     glUniform2f( m_zonesUniform, (xb) - 1, (xb) - 2);
 
     glBegin(GL_TRIANGLE_STRIP);
@@ -1420,7 +1439,7 @@ void GLUIPainter::drawText( const Rect& r, const char * text, int nbLines, int c
         drawRect(r, cFontBack + (isHover) + (isOn << 1), cOutline);	
     }
 
-    glColor4fv(m_colors[cFont]);
+    glColor4fv(s_colors[cFont]);
     drawString(r.x, r.y, text, nbLines);
     
     if (caretPos != -1)

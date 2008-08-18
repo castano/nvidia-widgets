@@ -62,9 +62,9 @@ namespace nv
         NVSDKENTRY virtual void drawPanel(const Rect & rect, const char * text, const Rect & rt, const Rect & ra, bool isUnfold, bool isHover, bool isFocus, int style);
 
         NVSDKENTRY virtual Rect getTextureViewRect(const Rect & rect, Rect& rt) const;
-//        NVSDKENTRY virtual void drawTextureView(const Rect & rect, const void* texID, const Rect& rt, const Rect & rz, int mipLevel, 
-//                                                const nv::vec4f& texelScale, const nv::vec4f& texelOffset, const nv::vec4i& texelSwizzling, 
-//                                                int style);
+        NVSDKENTRY virtual void drawTextureView(const Rect & rect, const void* texID, const Rect& rt, const Rect & rz, int mipLevel, 
+                                                float texelScale, float texelOffset, int r, int g, int b, int a, 
+                                                int style);
 
         // Eval widget dimensions
         NVSDKENTRY virtual int getCanvasMargin() const;
@@ -96,17 +96,6 @@ namespace nv
 
         NVSDKENTRY void init();
 
-        enum Color
-        {
-            cBase = 0,
-            cBool = 8,
-            cOutline = 16,
-            cFont = 20,
-            cFontBack = 24,
-            cTranslucent = 32,
-            cNbColors = 33,
-        };
-
     private:
 
         unsigned int m_setupStateDL;
@@ -127,9 +116,6 @@ namespace nv
         unsigned int m_texelOffsetUniform;
         unsigned int m_texelSwizzlingUniform;
 
-		struct color { 
-			float r, g, b, a;
-		} m_colors[cNbColors];
     };
 };
 

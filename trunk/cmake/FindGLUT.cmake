@@ -37,14 +37,14 @@ IF (WIN32)
 
 	FIND_PATH( GLUT_INCLUDE_DIR GL/glut.h
 		${GLUT_ROOT_PATH}/include
-		${PROJECT_SOURCE_DIR}/src/nvgl/glut/include
+		${PROJECT_SOURCE_DIR}/extern/glut/include
 		DOC "The directory where GL/glut.h resides")
 	FIND_LIBRARY( GLUT_glut_LIBRARY
 		NAMES glut GLUT glut32 glut32s
 		PATHS
 		${GLUT_ROOT_PATH}/lib
-		${PROJECT_SOURCE_DIR}/src/nvgl/glut/bin
-		${PROJECT_SOURCE_DIR}/src/nvgl/glut/lib
+		${PROJECT_SOURCE_DIR}/extern/glut/bin
+		${PROJECT_SOURCE_DIR}/extern/glut/lib
 		${OPENGL_LIBRARY_DIR}
 		DOC "The GLUT library")
 
