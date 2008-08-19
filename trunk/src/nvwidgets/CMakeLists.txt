@@ -1,4 +1,4 @@
-ADD_SUBDIRECTORY(tests)
+#ADD_SUBDIRECTORY(examples)
 
 SET(WIDGETS_SRCS
 	nvWidgets.h

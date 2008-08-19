@@ -19,6 +19,8 @@
 #else
 #define NVSDKENTRY __declspec(dllimport)
 #endif
+#else
+#define NVSDKENTRY
 #endif
 
 namespace nv

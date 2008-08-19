@@ -456,22 +456,22 @@ Rect GLUIPainter::getHorizontalSliderRect(const Rect & r, Rect& rs, float v, Rec
     Rect rect = r;
 
     if (rect.w == 0)
-        rect.w = getAutoWidth()+2*getWidgetMargin();
+        rect.w = getAutoWidth() + 2 * getWidgetMargin();
 
     if (rect.h == 0)
-        rect.h = getAutoHeight()+2*getWidgetMargin();
+        rect.h = getAutoHeight() + 2 * getWidgetMargin();
     
     // Eval the sliding & cursor rect
     rs.y = getWidgetMargin();
-    rs.h = rect.h - 2.0*rs.y;
+    rs.h = rect.h - 2 * rs.y;
     
     rc.y = rs.y;
     rc.h = rs.h;
     
     rs.x = 0;//getWidgetMargin(); 
     rc.w = rc.h;
-    rs.w = rect.w - 2.0*rs.x - rc.w;
-    rc.x = v * rs.w;
+    rs.w = rect.w - 2 * rs.x - rc.w;
+    rc.x = int(v * rs.w);
 
     return rect;
 }
@@ -634,7 +634,7 @@ void GLUIPainter::drawComboBox(const Rect & r, int numOptions, const char * opti
     drawFrame( r, Point(rt.x, rt.y), isHover, false, isFocus );
     drawText( Rect(r.x+rt.x, r.y+rt.y, rt.w, rt.h), options[ selected ] );
 
-    drawDownArrow( Rect(r.x+rd.x, r.y+rd.y, rd.w, rd.h), rd.h *0.15, cBase + (!isHover) + (isFocus << 2), cOutline);
+    drawDownArrow( Rect(r.x+rd.x, r.y+rd.y, rd.w, rd.h), int(rd.h * 0.15f), cBase + (!isHover) + (isFocus << 2), cOutline);
 }
 
 void GLUIPainter::drawComboOptions(const Rect & r, int numOptions, const char * options[], const Rect& ri, const Rect & rt, int selected, int hovered, bool isHover, bool isFocus, int style)
@@ -654,11 +654,11 @@ Rect GLUIPainter::getPanelRect(const Rect & r, const char * text, Rect& rt, Rect
     if (rect.h == 0)
     {
         rt.h = getFontHeight();
-        rect.h = rt.h + 2*rt.y;
+        rect.h = rt.h + 2 * rt.y;
     }
     else
     {
-        rt.h = rect.h - 2*rt.y;
+        rt.h = rect.h - 2 * rt.y;
     }   
 
     ra.h = rt.h;
@@ -668,17 +668,17 @@ Rect GLUIPainter::getPanelRect(const Rect & r, const char * text, Rect& rt, Rect
     if (rect.w == 0)
     {
         rt.w = getTextLineWidth(text);
-        rect.w = rt.w + 2*rt.x;
+        rect.w = rt.w + 2 * rt.x;
         
-        //Add room for drop down button
+        // Add room for drop down button
         rect.w += ra.h + rt.x;
     }
     else
     {
-        //Add room for drop down button
-        rt.w = rect.w - 3*rt.x - ra.h;
+        // Add room for drop down button
+        rt.w = rect.w - 3 * rt.x - ra.h;
     }
-    ra.x = 2*rt.x + rt.w;
+    ra.x = 2 * rt.x + rt.w;
 
     return rect;
 
@@ -689,9 +689,9 @@ void GLUIPainter::drawPanel(const Rect & r, const char * text, const Rect & rt, 
     drawFrame( r, Point(rt.x, rt.y), isHover, false, isFocus );
     drawText( Rect(r.x+rt.x, r.y+rt.y, rt.w, rt.h), text );
     if (isUnfold)
-        drawMinus( Rect(r.x+ra.x, r.y+ra.y, ra.w, ra.h), ra.h *0.15, cBase + (!isHover) + (isFocus << 2), cOutline);
+        drawMinus( Rect(r.x+ra.x, r.y+ra.y, ra.w, ra.h), int(ra.h * 0.15f), cBase + (!isHover) + (isFocus << 2), cOutline);
     else
-        drawPlus( Rect(r.x+ra.x, r.y+ra.y, ra.w, ra.h), ra.h *0.15, cBase + (!isHover) + (isFocus << 2), cOutline);
+        drawPlus( Rect(r.x+ra.x, r.y+ra.y, ra.w, ra.h), int(ra.h * 0.15f), cBase + (!isHover) + (isFocus << 2), cOutline);
 }
 
 Rect GLUIPainter::getTextureViewRect(const Rect & r, Rect& rt) const
@@ -706,8 +706,8 @@ Rect GLUIPainter::getTextureViewRect(const Rect & r, Rect& rt) const
 
     rt.x = getCanvasMargin();
     rt.y = getCanvasMargin();
-    rt.w = rect.w - 2*getCanvasMargin();
-    rt.h = rect.h - 2*getCanvasMargin();
+    rt.w = rect.w - 2 * getCanvasMargin();
+    rt.h = rect.h - 2 * getCanvasMargin();
 
     return rect;
 }
@@ -722,7 +722,7 @@ void GLUIPainter::drawTextureView(const Rect & rect, const void* texID, const Re
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, lTexID);
-    glColor3f( 1.0, 1.0, 1.0);	
+    glColor3f(1.0f, 1.0f, 1.0f);	
 
     glUseProgram(m_textureViewProgram);
     glUniform1f( m_texMipLevelUniform, (float) mipLevel);
