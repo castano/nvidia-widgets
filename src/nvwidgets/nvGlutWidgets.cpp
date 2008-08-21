@@ -16,7 +16,11 @@
 
 #include <stdlib.h> // exit, needed by GL/glut.h
 #include <GL/glew.h>
+#ifdef __APPLE_CC__
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif
 
 using namespace nv;
 

@@ -12,12 +12,17 @@
 
 #include <GL/glew.h>
 
+#ifdef __APPLE_CC__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h> // glutBitmapWidth, glutBitmapCharacter
+#endif
+
 #define NV_REPORT_COMPILE_ERRORS
 #include <nvglutils/nvShaderUtils.h>
 
 #include <math.h> // sqrtf
 #include <stdlib.h> // exit (required by glut.h)
-#include <GL/glut.h> // glutBitmapWidth, glutBitmapCharacter
 #include <string.h> // strlen
 
 using namespace nv;
