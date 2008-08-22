@@ -10,6 +10,10 @@
 
 #include "nvGLWidgets.h"
 
+#include <math.h> // sqrtf
+#include <stdlib.h> // exit (required by glut.h)
+#include <string.h> // strlen
+
 #include <GL/glew.h>
 
 #ifdef __APPLE_CC__
@@ -21,9 +25,6 @@
 #define NV_REPORT_COMPILE_ERRORS
 #include <nvglutils/nvShaderUtils.h>
 
-#include <math.h> // sqrtf
-#include <stdlib.h> // exit (required by glut.h)
-#include <string.h> // strlen
 
 using namespace nv;
 
@@ -276,7 +277,7 @@ int GLUIPainter::getPickedCharNb(const char * text, const Point& at) const
     return (text - textstart);
 }
 
-void GLUIPainter::drawFrame(const Rect & r, int margin, int style)
+void GLUIPainter::drawFrame(const Rect & r, int margin, int /*style*/)
 {
     drawRoundedRectOutline(Rect(r.x - margin, r.y - margin, r.w + 2*margin, r.h + 2*margin), nv::Point(margin, margin), cOutline);
 }
@@ -310,7 +311,7 @@ Rect GLUIPainter::getLabelRect(const Rect & r, const char * text, Rect & rt, int
     return rect;
 }
 
-void GLUIPainter::drawLabel(const Rect & r, const char * text, const Rect & rt, const int& nbLines, bool isHover, int style)
+void GLUIPainter::drawLabel(const Rect & r, const char * text, const Rect & rt, const int& nbLines, bool /*isHover*/, int style)
 {
     if (style > 0 )
         drawFrame( r, Point( rt.x, rt.y ), false, false, false );
@@ -345,7 +346,7 @@ Rect GLUIPainter::getLineEditRect(const Rect & r, const char * text, Rect & rt) 
     return rect;
 }
 
-void GLUIPainter::drawLineEdit(const Rect & r, const char * text, const Rect & rt, int caretPos, bool isSelected, bool isHover, int style)
+void GLUIPainter::drawLineEdit(const Rect & r, const char * text, const Rect & rt, int caretPos, bool isSelected, bool /*isHover*/, int /*style*/)
 {
     drawFrame( r, Point( rt.x, rt.y ), true, isSelected, false );
     drawText( Rect(r.x+rt.x, r.y+rt.y, rt.w, rt.h), text, 1, caretPos);
@@ -378,7 +379,7 @@ Rect GLUIPainter::getButtonRect(const Rect & r, const char * text, Rect & rt) co
     return rect;
 }
 
-void GLUIPainter::drawButton(const Rect & r, const char * text, const Rect & rt, bool isDown, bool isHover, bool isFocus, int style)
+void GLUIPainter::drawButton(const Rect & r, const char * text, const Rect & rt, bool isDown, bool isHover, bool isFocus, int /*style*/)
 {
     drawFrame( r, Point( rt.x, rt.y ), isHover, isDown, isFocus );
     drawText( Rect(r.x+rt.x, r.y+rt.y, rt.w, rt.h) , text);
@@ -481,7 +482,7 @@ Rect GLUIPainter::getHorizontalSliderRect(const Rect & r, Rect& rs, float v, Rec
     return rect;
 }
 
-void GLUIPainter::drawHorizontalSlider(const Rect & r, Rect& rs, float v, Rect& rc, bool isHover, int style)
+void GLUIPainter::drawHorizontalSlider(const Rect & r, Rect& rs, float /*v*/, Rect& rc, bool isHover, int /*style*/)
 {
     int sliderHeight = rs.h/3;
     drawFrame( Rect(r.x + rs.x, r.y + rs.y + sliderHeight, r.w - 2*rs.x, sliderHeight), Point(sliderHeight/2, sliderHeight/2), isHover, false, false );
@@ -555,13 +556,13 @@ Rect GLUIPainter::getListRect(const Rect & r, int numOptions, const char * optio
     return rect;
 }
 
-void GLUIPainter::drawListItem(const Rect & r, const char * text, const Rect & rt, bool isSelected, bool isHover, int style)
+void GLUIPainter::drawListItem(const Rect & r, const char * text, const Rect & rt, bool isSelected, bool isHover, int /*style*/)
 {
 //	drawFrame( r, Point(0, 0), isHover, isSelected, false );	
     drawText( Rect(r.x+rt.x, r.y+rt.y, rt.w, rt.h), text, isHover, isSelected);
 }
 
-void GLUIPainter::drawListBox(const Rect & r, int numOptions, const char * options[], const Rect& ri, const Rect & rt, int selected, int hovered, int style)
+void GLUIPainter::drawListBox(const Rect & r, int numOptions, const char * options[], const Rect& ri, const Rect & rt, int selected, int hovered, int /*style*/)
 {
     drawFrame( r, Point(ri.x, ri.y) );
 
@@ -579,7 +580,7 @@ void GLUIPainter::drawListBox(const Rect & r, int numOptions, const char * optio
     }
 }
 
-Rect GLUIPainter::getComboRect(const Rect & r, int numOptions, const char * options[], int selected, Rect& rt, Rect& rd) const
+Rect GLUIPainter::getComboRect(const Rect & r, int numOptions, const char * options[], int /*selected*/, Rect& rt, Rect& rd) const
 {
     Rect rect = r;
     rt.x = getWidgetMargin();
@@ -634,7 +635,7 @@ Rect GLUIPainter::getComboOptionsRect(const Rect & rCombo, int numOptions, const
     return rect;
 }
 
-void GLUIPainter::drawComboBox(const Rect & r, int numOptions, const char * options[], const Rect & rt, const Rect& rd, int selected, bool isHover, bool isFocus, int style)
+void GLUIPainter::drawComboBox(const Rect & r, int /*numOptions*/, const char * options[], const Rect & rt, const Rect& rd, int selected, bool isHover, bool isFocus, int /*style*/)
 {
     drawFrame( r, Point(rt.x, rt.y), isHover, false, isFocus );
     drawText( Rect(r.x+rt.x, r.y+rt.y, rt.w, rt.h), options[ selected ] );
@@ -642,7 +643,7 @@ void GLUIPainter::drawComboBox(const Rect & r, int numOptions, const char * opti
     drawDownArrow( Rect(r.x+rd.x, r.y+rd.y, rd.w, rd.h), int(rd.h * 0.15f), cBase + (!isHover) + (isFocus << 2), cOutline);
 }
 
-void GLUIPainter::drawComboOptions(const Rect & r, int numOptions, const char * options[], const Rect& ri, const Rect & rt, int selected, int hovered, bool isHover, bool isFocus, int style)
+void GLUIPainter::drawComboOptions(const Rect & r, int numOptions, const char * options[], const Rect& ri, const Rect & rt, int selected, int hovered, bool /*isHover*/, bool /*isFocus*/, int style)
 {
     m_foregroundDL = glGenLists(1);
     glNewList( m_foregroundDL, GL_COMPILE);
@@ -689,7 +690,7 @@ Rect GLUIPainter::getPanelRect(const Rect & r, const char * text, Rect& rt, Rect
 
 }
 
-void GLUIPainter::drawPanel(const Rect & r, const char * text, const Rect & rt, const Rect & ra, bool isUnfold, bool isHover, bool isFocus, int style)
+void GLUIPainter::drawPanel(const Rect & r, const char * text, const Rect & rt, const Rect & ra, bool isUnfold, bool isHover, bool isFocus, int /*style*/)
 {
     drawFrame( r, Point(rt.x, rt.y), isHover, false, isFocus );
     drawText( Rect(r.x+rt.x, r.y+rt.y, rt.w, rt.h), text );
@@ -719,7 +720,7 @@ Rect GLUIPainter::getTextureViewRect(const Rect & r, Rect& rt) const
 
 void GLUIPainter::drawTextureView(const Rect & rect, const void* texID, const Rect& rt, const Rect & rz, int mipLevel, 
                                   float texelScale, float texelOffset, int r, int g, int b, int a, 
-                                  int style)
+                                  int /*style*/)
 {
     drawFrame( rect, Point(rt.x, rt.y), false, false, false );
 
@@ -1144,8 +1145,6 @@ void GLUIPainter::drawCircle( const Rect& rect, int fillColorId, int borderColor
 
 void GLUIPainter::drawMinus( const Rect& rect, int width, int fillColorId, int borderColorId ) const
 {
-    float offset = sqrtf(2.0f) / 2.0f;
-   
     float xb = width;
     float yb = width;
     
@@ -1190,8 +1189,6 @@ void GLUIPainter::drawMinus( const Rect& rect, int width, int fillColorId, int b
 
 void GLUIPainter::drawPlus( const Rect& rect, int width, int fillColorId, int borderColorId ) const
 {
-    float offset = sqrt(2.0)/2.0 ;
-   
     float xb = width;
     float yb = width;
     
@@ -1437,7 +1434,7 @@ void GLUIPainter::drawUpArrow( const Rect& rect, int width, int fillColorId, int
     glUseProgram(0);
 }
 
-void GLUIPainter::drawText( const Rect& r, const char * text, int nbLines, int caretPos, bool isHover, bool isOn, bool isFocus )
+void GLUIPainter::drawText( const Rect& r, const char * text, int nbLines, int caretPos, bool isHover, bool isOn, bool /*isFocus*/ )
 {
     if (isHover || isOn /* || isFocus*/)
     {
@@ -1455,7 +1452,7 @@ void GLUIPainter::drawText( const Rect& r, const char * text, int nbLines, int c
     }
 }
 
-void GLUIPainter::drawFrame( const Rect& rect, const Point& corner, bool isHover, bool isOn, bool isFocus ) const
+void GLUIPainter::drawFrame( const Rect& rect, const Point& corner, bool isHover, bool isOn, bool /*isFocus*/ ) const
 {
     int lColorNb = cBase + (isHover) + (isOn << 1);// + (isFocus << 2);
 
@@ -1465,7 +1462,7 @@ void GLUIPainter::drawFrame( const Rect& rect, const Point& corner, bool isHover
         drawRoundedRect( rect, corner , lColorNb, cOutline );
 }
 
-void GLUIPainter::drawBoolFrame( const Rect& rect, const Point& corner, bool isHover, bool isOn, bool isFocus ) const
+void GLUIPainter::drawBoolFrame( const Rect& rect, const Point& corner, bool isHover, bool isOn, bool /*isFocus*/ ) const
 {
     int lColorNb = cBool + (isHover) + (isOn << 1);// + (isFocus << 2);
         
