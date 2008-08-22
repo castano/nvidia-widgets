@@ -233,7 +233,7 @@ void UIContext::beginGroup(int flags, const Rect& r)
     newGroup.margin = ((flags & GroupFlags_LayoutNoMargin) == 0) * m_painter->getCanvasMargin();
     newGroup.space = ((flags & GroupFlags_LayoutNoSpace) == 0) * m_painter->getCanvasSpace();
     newGroup.flags = flags;
-    int newLayout = flags & GroupFlags_LayoutMask;
+    //int newLayout = flags & GroupFlags_LayoutMask;
     int newAlign = flags & GroupFlags_AlignMask;
     int newStart = flags & GroupFlags_StartMask;
 
@@ -314,7 +314,7 @@ void UIContext::endGroup()
     }
 }
 
-void UIContext::beginFrame(int flags, const Rect& rect, int style)
+void UIContext::beginFrame(int flags, const Rect& rect, int /*style*/)
 {
     beginGroup(flags, rect);
 }
@@ -338,7 +338,6 @@ bool UIContext::beginPanel(Rect & r, const char * text, bool * isUnfold, int fla
 
         bool focus = hasFocus(rect);
         bool hover = isHover(rect);
-        bool isDown = false;
         
         if (focus)
         {

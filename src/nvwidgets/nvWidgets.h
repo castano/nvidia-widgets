@@ -165,7 +165,7 @@ namespace nv
     public:
         NVSDKENTRY UIPainter() {}
 
-        NVSDKENTRY virtual void begin( const Rect& window ) { init(); }
+        NVSDKENTRY virtual void begin( const Rect & /*window*/ ) { init(); }
         NVSDKENTRY virtual void end() {}
 
         // These methods should be called between begin/end
