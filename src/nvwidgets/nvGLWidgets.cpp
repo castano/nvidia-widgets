@@ -43,11 +43,11 @@ enum Color
 
 const static float s_colors[cNbColors][4] =
 {
-	// cBase
-	{ norm255(89), norm255(89), norm255(89), 0.7f },
-	{ norm255(166), norm255(166), norm255(166), 0.8f },
-	{ norm255(212), norm255(228), norm255(60), 0.5f },
-	{ norm255(227), norm255(237), norm255(127), 0.5f },
+    // cBase
+    { norm255(89), norm255(89), norm255(89), 0.7f },
+    { norm255(166), norm255(166), norm255(166), 0.8f },
+    { norm255(212), norm255(228), norm255(60), 0.5f },
+    { norm255(227), norm255(237), norm255(127), 0.5f },
 
     // cBool
     { norm255(99), norm255(37), norm255(35), 1.0f },
@@ -57,15 +57,15 @@ const static float s_colors[cNbColors][4] =
 
     // cOutline
     { norm255(255), norm255(255), norm255(255), 1.0f },
-	{ norm255(255), norm255(255), norm255(255), 1.0f },
-	{ norm255(255), norm255(255), norm255(255), 1.0f },
-	{ norm255(255), norm255(255), norm255(255), 1.0f },
+    { norm255(255), norm255(255), norm255(255), 1.0f },
+    { norm255(255), norm255(255), norm255(255), 1.0f },
+    { norm255(255), norm255(255), norm255(255), 1.0f },
 
     // cFont
     { norm255(255), norm255(255), norm255(255), 1.0f },
-	{ norm255(255), norm255(255), norm255(255), 1.0f },
-	{ norm255(255), norm255(255), norm255(255), 1.0f },
-	{ norm255(255), norm255(255), norm255(255), 1.0f },
+    { norm255(255), norm255(255), norm255(255), 1.0f },
+    { norm255(255), norm255(255), norm255(255), 1.0f },
+    { norm255(255), norm255(255), norm255(255), 1.0f },
 
     // cFontBack
     { norm255(79), norm255(129), norm255(189), 1.0 },
@@ -75,17 +75,17 @@ const static float s_colors[cNbColors][4] =
     
     // cTranslucent
     { norm255(0), norm255(0), norm255(0), 0.0 },
-	{ norm255(0), norm255(0), norm255(0), 0.0 },
-	{ norm255(0), norm255(0), norm255(0), 0.0 },
-	{ norm255(0), norm255(0), norm255(0), 0.0 },
+    { norm255(0), norm255(0), norm255(0), 0.0 },
+    { norm255(0), norm255(0), norm255(0), 0.0 },
+    { norm255(0), norm255(0), norm255(0), 0.0 },
 };
     
 
 
 template <typename T> T max(const T & a, const T & b)
 {
-	if (a > b) return a;
-	return b;
+    if (a > b) return a;
+    return b;
 }
 
 const char* cWidgetVSSource = {
@@ -93,13 +93,13 @@ const char* cWidgetVSSource = {
     \n\
     void main()\n\
     {\n\
-		gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;\n\
+        gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;\n\
         gl_TexCoord[0] = gl_MultiTexCoord0;\n\
     }\n\
     "};
 
 // @@ IC: Use standard GLSL. Do not initialize uniforms.
-	
+    
 const char* cWidgetFSSource = {
     "#version 120\n\
     uniform vec4 fillColor /*= vec4( 1.0, 0.0,0.0,1.0)*/;\n\
@@ -415,7 +415,7 @@ Rect GLUIPainter::getCheckRect(const Rect & r, const char * text, Rect & rt, Rec
 }
 
 void GLUIPainter::drawCheckButton(const Rect & r, const char * text, const Rect & rt, const Rect& rc, bool isChecked, bool isHover, bool isFocus, int style)
-{	
+{    
     if (style) drawFrame( r, Point( rt.y, rt.y ), isHover, false, isFocus );
     drawBoolFrame( Rect(r.x+rc.x, r.y+rc.y, rc.w, rc.h), Point( rc.w/6, rc.h/6 ), isHover, isChecked, false );
     drawText( Rect(r.x+rt.x, r.y+rt.y, rt.w, rt.h) , text);
@@ -558,7 +558,7 @@ Rect GLUIPainter::getListRect(const Rect & r, int numOptions, const char * optio
 
 void GLUIPainter::drawListItem(const Rect & r, const char * text, const Rect & rt, bool isSelected, bool isHover, int /*style*/)
 {
-//	drawFrame( r, Point(0, 0), isHover, isSelected, false );	
+//    drawFrame( r, Point(0, 0), isHover, isSelected, false );    
     drawText( Rect(r.x+rt.x, r.y+rt.y, rt.w, rt.h), text, isHover, isSelected);
 }
 
@@ -568,13 +568,13 @@ void GLUIPainter::drawListBox(const Rect & r, int numOptions, const char * optio
 
     Rect ir( r.x + ri.x, r.y + r.h - ri.y - ri.h, ri.w, ri.h );  
     for ( int i = 0; i < numOptions; i++ )
-    {	
+    {    
         if ( (i == hovered) || (i == selected))
         {
             drawFrame( ir, Point(ri.x, ri.y), false, (i == selected));
         }
 
-        drawText( Rect(ir.x + rt.x , ir.y + rt.y, rt.w, rt.h), options[i]);	
+        drawText( Rect(ir.x + rt.x , ir.y + rt.y, rt.w, rt.h), options[i]);    
 
         ir.y -= ir.h;
     }
@@ -728,7 +728,7 @@ void GLUIPainter::drawTextureView(const Rect & rect, const void* texID, const Re
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, lTexID);
-    glColor3f(1.0f, 1.0f, 1.0f);	
+    glColor3f(1.0f, 1.0f, 1.0f);    
 
     glUseProgram(m_textureViewProgram);
     glUniform1f( m_texMipLevelUniform, (float) mipLevel);
@@ -763,7 +763,7 @@ void GLUIPainter::init()
         GLuint fShader = nv::CompileGLSLShader( GL_FRAGMENT_SHADER, cWidgetFSSource);
         if (!fShader) fprintf(stderr, "Fragment shader compile failed\n");
 
-        m_widgetProgram = nv::LinkGLSLProgram( vShader, fShader );	
+        m_widgetProgram = nv::LinkGLSLProgram( vShader, fShader );    
         
         m_fillColorUniform = glGetUniformLocation(m_widgetProgram, "fillColor");
         m_borderColorUniform = glGetUniformLocation(m_widgetProgram, "borderColor");
@@ -774,7 +774,7 @@ void GLUIPainter::init()
             GLuint fShaderTex = nv::CompileGLSLShader( GL_FRAGMENT_SHADER, cTexViewWidgetFSSource);
             if (!fShaderTex) fprintf(stderr, "Fragment shader compile failed\n");
 
-            m_textureViewProgram = nv::LinkGLSLProgram( vShader, fShaderTex );	
+            m_textureViewProgram = nv::LinkGLSLProgram( vShader, fShaderTex );    
             m_texMipLevelUniform = glGetUniformLocation(m_textureViewProgram, "mipLevel");
             m_texelScaleUniform = glGetUniformLocation(m_textureViewProgram, "texelScale");
             m_texelOffsetUniform = glGetUniformLocation(m_textureViewProgram, "texelOffset");
@@ -782,54 +782,54 @@ void GLUIPainter::init()
         }
     }
 
-	if (m_setupStateDL == 0)
-	{
+    if (m_setupStateDL == 0)
+    {
         m_setupStateDL = glGenLists(1);
         glNewList( m_setupStateDL, GL_COMPILE);
-		{			
-    	    // Cache previous state
+        {            
+            // Cache previous state
             glPushAttrib( GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
             
             // fill mode always
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		   
+           
             // Stencil / Depth buffer and test disabled
-			glDisable(GL_STENCIL_TEST);
-			glStencilMask( 0 );
-			glDisable(GL_DEPTH_TEST);
-			glDepthMask( GL_FALSE );
-			
-			// Blend on for alpha
+            glDisable(GL_STENCIL_TEST);
+            glStencilMask( 0 );
+            glDisable(GL_DEPTH_TEST);
+            glDepthMask( GL_FALSE );
+            
+            // Blend on for alpha
             glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             // Color active
-			glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
-		
+            glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
+        
             // Modelview is identity
             glMatrixMode( GL_MODELVIEW );
             glPushMatrix();
             glLoadIdentity();
         }
-		glEndList();
-	}
+        glEndList();
+    }
 
     if (m_restoreStateDL == 0)
-	{
+    {
         m_restoreStateDL = glGenLists(1);
         glNewList( m_restoreStateDL, GL_COMPILE);
-		{			
+        {            
             // Restore state.
-	        glPopAttrib();
+            glPopAttrib();
 
-	        // Restore matrices.
+            // Restore matrices.
             glMatrixMode( GL_PROJECTION);
             glPopMatrix();
             glMatrixMode( GL_MODELVIEW);
             glPopMatrix();
-		}
-		glEndList();
-	}
+        }
+        glEndList();
+    }
 
     if (m_textListBase == 0)
     {
@@ -848,7 +848,7 @@ void GLUIPainter::begin(const Rect& window)
 {
     init();
 
-	// Cache and setup state
+    // Cache and setup state
     glCallList( m_setupStateDL );
 
     // Set matrices.
@@ -868,7 +868,7 @@ void GLUIPainter::end()
     }
 
     // Restore state.
-	glCallList( m_restoreStateDL );
+    glCallList( m_restoreStateDL );
 }
 
 // Draw Primitive shapes
@@ -1438,7 +1438,7 @@ void GLUIPainter::drawText( const Rect& r, const char * text, int nbLines, int c
 {
     if (isHover || isOn /* || isFocus*/)
     {
-        drawRect(r, cFontBack + (isHover) + (isOn << 1), cOutline);	
+        drawRect(r, cFontBack + (isHover) + (isOn << 1), cOutline);    
     }
 
     glColor4fv(s_colors[cFont]);

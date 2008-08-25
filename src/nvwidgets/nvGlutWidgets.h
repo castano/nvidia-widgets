@@ -20,74 +20,74 @@
 namespace nv
 {
 
-	class GlutUIContext : public UIContext
-	{
-	public:
+    class NVSDKENTRY GlutUIContext : public UIContext
+    {
+    public:
 
-		//
-		// Default UI constructor
-		//
-		//  Creates private OpenGL painter
-		//////////////////////////////////////////////////////////////////
-		GlutUIContext() :
-			UIContext( *(new GLUIPainter()) ),
-			m_ownPainter(true) 
-		{
-		}
+        //
+        // Default UI constructor
+        //
+        //  Creates private OpenGL painter
+        //////////////////////////////////////////////////////////////////
+        GlutUIContext() :
+            UIContext( *(new GLUIPainter()) ),
+            m_ownPainter(true) 
+        {
+        }
 
-		//
-		// Alternate UI constructor
-		//
-		//  Allows for overriding the standard painter
-		//////////////////////////////////////////////////////////////////
-		GlutUIContext(UIPainter& painter) : 
-			UIContext( painter ),
-			m_ownPainter(false)
-		{
-		}
+        //
+        // Alternate UI constructor
+        //
+        //  Allows for overriding the standard painter
+        //////////////////////////////////////////////////////////////////
+        GlutUIContext(UIPainter& painter) : 
+            UIContext( painter ),
+            m_ownPainter(false)
+        {
+        }
 
-		//
-		// UI  destructor
-		//
-		//  Destroy painter if it is private
-		//////////////////////////////////////////////////////////////////
-		~GlutUIContext()
-		{
-			if (m_ownPainter) delete getPainter();
-		}
+        //
+        // UI  destructor
+        //
+        //  Destroy painter if it is private
+        //////////////////////////////////////////////////////////////////
+        ~GlutUIContext()
+        {
+            if (m_ownPainter) delete getPainter();
+        }
 
-		//
-		// One time initialization
-		//
-		//////////////////////////////////////////////////////////////////
-		NVSDKENTRY bool init();
+        //
+        // One time initialization
+        //
+        //////////////////////////////////////////////////////////////////
+        bool init();
 
-		//
-		// UI method for processing GLUT mouse button events
-		//
-		//  Call this method from the glutMouseFunc callback, the
-		// modifier parameter maps to glutGetModifiers.
-		//////////////////////////////////////////////////////////////////
-		NVSDKENTRY virtual void mouse(int button, int state, int modifier, int x, int y);
-		
-		NVSDKENTRY void mouse(int button, int state, int x, int y);
+        //
+        // UI method for processing GLUT mouse button events
+        //
+        //  Call this method from the glutMouseFunc callback, the
+        // modifier parameter maps to glutGetModifiers.
+        //////////////////////////////////////////////////////////////////
+        virtual void mouse(int button, int state, int modifier, int x, int y);
+        
+        void mouse(int button, int state, int x, int y);
 
-		//
-		// UI method for processing key events
-		//
-		//  Call this method from the glutReshapeFunc callback
-		//////////////////////////////////////////////////////////////////
-		NVSDKENTRY void specialKeyboard(int k, int x, int y);
+        //
+        // UI method for processing key events
+        //
+        //  Call this method from the glutReshapeFunc callback
+        //////////////////////////////////////////////////////////////////
+        void specialKeyboard(int k, int x, int y);
 
-	private:
+    private:
 
-		//
-		//  Translate non-ascii keys from GLUT to nvWidgets
-		//////////////////////////////////////////////////////////////////
-		unsigned char translateKey( int k );
+        //
+        //  Translate non-ascii keys from GLUT to nvWidgets
+        //////////////////////////////////////////////////////////////////
+        unsigned char translateKey( int k );
 
-		bool m_ownPainter;
-	};
+        bool m_ownPainter;
+    };
 
 };
 

@@ -25,31 +25,31 @@
 
 namespace nv
 {
-	
-    struct Point
+    
+    struct NVSDKENTRY Point
     {
-        NVSDKENTRY Point() : x(0), y(0) {}
-        NVSDKENTRY Point(int ix, int iy) : x(ix), y(iy) {}
-        NVSDKENTRY Point(const Point & p) : x(p.x), y(p.y) {}
+        Point() : x(0), y(0) {}
+        Point(int ix, int iy) : x(ix), y(iy) {}
+        Point(const Point & p) : x(p.x), y(p.y) {}
 
-        NVSDKENTRY const Point& operator= (const Point & p) { this->x = p.x; this->y = p.y; return *this; }
+        const Point& operator= (const Point & p) { this->x = p.x; this->y = p.y; return *this; }
 
         int x, y;
     };
 
-    struct Rect
+    struct NVSDKENTRY Rect
     {
-        NVSDKENTRY Rect() : x(0), y(0), w(0), h(0) {}
-        NVSDKENTRY Rect(const Point & p) : x(p.x), y(p.y), w(0), h(0) {}
-        NVSDKENTRY Rect(int ix, int iy, int iw = 0, int ih = 0) : x(ix), y(iy), w(iw), h(ih) {}
-        NVSDKENTRY Rect(const Rect & r) : x(r.x), y(r.y), w(r.w), h(r.h) {}
+        Rect() : x(0), y(0), w(0), h(0) {}
+        Rect(const Point & p) : x(p.x), y(p.y), w(0), h(0) {}
+        Rect(int ix, int iy, int iw = 0, int ih = 0) : x(ix), y(iy), w(iw), h(ih) {}
+        Rect(const Rect & r) : x(r.x), y(r.y), w(r.w), h(r.h) {}
 
-        NVSDKENTRY const Rect& operator= (const Rect & r) { this->x = r.x; this->y = r.y; this->w = r.w; this->h = r.h; return *this; }
+        const Rect& operator= (const Rect & r) { this->x = r.x; this->y = r.y; this->w = r.w; this->h = r.h; return *this; }
 
         int x, y;
         int w, h;
 
-        NVSDKENTRY static const Rect null;
+        static const Rect null;
     };
 
     enum ButtonFlags
@@ -153,122 +153,122 @@ namespace nv
     struct Group
     {
         Rect bounds;  // anchor point + width and height of the region
-        int flags;   // group behavior 
-        int margin; // border 
-        int space;  // interior
+        int flags;    // group behavior 
+        int margin;   // border 
+        int space;    // interior
     };
 
     //*************************************************************************
     // UIPainter
-    class UIPainter
+    class NVSDKENTRY UIPainter
     {
     public:
-        NVSDKENTRY UIPainter() {}
+        UIPainter() {}
 
-        NVSDKENTRY virtual void begin( const Rect & /*window*/ ) { init(); }
-        NVSDKENTRY virtual void end() {}
+        virtual void begin( const Rect & /*window*/ ) { init(); }
+        virtual void end() {}
 
         // These methods should be called between begin/end
 
-        NVSDKENTRY virtual void drawFrame(const Rect & r, int margin, int style) = 0;
+        virtual void drawFrame(const Rect & r, int margin, int style) = 0;
 
-        NVSDKENTRY virtual Rect getLabelRect(const Rect & r, const char * text, Rect & rt, int& nbLines) const = 0;
-        NVSDKENTRY virtual void drawLabel(const Rect & r, const char * text, const Rect & rt, const int& nbLines, bool isHover, int style) = 0;
+        virtual Rect getLabelRect(const Rect & r, const char * text, Rect & rt, int& nbLines) const = 0;
+        virtual void drawLabel(const Rect & r, const char * text, const Rect & rt, const int& nbLines, bool isHover, int style) = 0;
       
-        NVSDKENTRY virtual Rect getButtonRect(const Rect & r, const char * text, Rect & rt) const = 0;
-        NVSDKENTRY virtual void drawButton(const Rect & r, const char * text, const Rect & rt, bool isDown, bool isHover, bool isFocus, int style) = 0;
+        virtual Rect getButtonRect(const Rect & r, const char * text, Rect & rt) const = 0;
+        virtual void drawButton(const Rect & r, const char * text, const Rect & rt, bool isDown, bool isHover, bool isFocus, int style) = 0;
     
-        NVSDKENTRY virtual Rect getCheckRect(const Rect & r, const char * text, Rect & rt, Rect & rc) const = 0;
-        NVSDKENTRY virtual void drawCheckButton(const Rect & r, const char * text, const Rect & rt, const Rect & rr, bool isChecked, bool isHover, bool isFocus, int style) = 0;
+        virtual Rect getCheckRect(const Rect & r, const char * text, Rect & rt, Rect & rc) const = 0;
+        virtual void drawCheckButton(const Rect & r, const char * text, const Rect & rt, const Rect & rr, bool isChecked, bool isHover, bool isFocus, int style) = 0;
 
-        NVSDKENTRY virtual Rect getRadioRect(const Rect & r, const char * text, Rect & rt, Rect & rr) const = 0;
-        NVSDKENTRY virtual void drawRadioButton(const Rect & r, const char * text, const Rect & rt, const Rect & rr, bool isOn, bool isHover, bool isFocus, int style) = 0;
+        virtual Rect getRadioRect(const Rect & r, const char * text, Rect & rt, Rect & rr) const = 0;
+        virtual void drawRadioButton(const Rect & r, const char * text, const Rect & rt, const Rect & rr, bool isOn, bool isHover, bool isFocus, int style) = 0;
 
-        NVSDKENTRY virtual Rect getHorizontalSliderRect(const Rect & r, Rect& rs, float v, Rect& rc) const = 0;
-        NVSDKENTRY virtual void drawHorizontalSlider(const Rect & r, Rect& rs, float v, Rect& rc, bool isHover, int style) = 0;
+        virtual Rect getHorizontalSliderRect(const Rect & r, Rect& rs, float v, Rect& rc) const = 0;
+        virtual void drawHorizontalSlider(const Rect & r, Rect& rs, float v, Rect& rc, bool isHover, int style) = 0;
 
-        NVSDKENTRY virtual Rect getItemRect(const Rect & r, const char * text, Rect & rt) const = 0;
-        NVSDKENTRY virtual void drawListItem(const Rect & r, const char * text, const Rect & rt, bool isSelected, bool isHover, int style) = 0;
+        virtual Rect getItemRect(const Rect & r, const char * text, Rect & rt) const = 0;
+        virtual void drawListItem(const Rect & r, const char * text, const Rect & rt, bool isSelected, bool isHover, int style) = 0;
  
-        NVSDKENTRY virtual Rect getListRect(const Rect & r, int numOptions, const char * options[], Rect& ri, Rect & rt) const = 0;
-        NVSDKENTRY virtual void drawListBox(const Rect & r, int numOptions, const char * options[], const Rect& ri, const Rect & rt, int selected, int hovered, int style) = 0;
+        virtual Rect getListRect(const Rect & r, int numOptions, const char * options[], Rect& ri, Rect & rt) const = 0;
+        virtual void drawListBox(const Rect & r, int numOptions, const char * options[], const Rect& ri, const Rect & rt, int selected, int hovered, int style) = 0;
       
-        NVSDKENTRY virtual Rect getComboRect(const Rect & r, int numOptions, const char * options[], int selected, Rect& rt, Rect& ra) const = 0;
-        NVSDKENTRY virtual Rect getComboOptionsRect(const Rect & rCombo, int numOptions, const char * options[], Rect& ri, Rect & rit) const = 0;
-        NVSDKENTRY virtual void drawComboBox(const Rect & rect, int numOptions, const char * options[], const Rect & rt, const Rect & ra, int selected, bool isHover, bool isFocus, int style) = 0;
-        NVSDKENTRY virtual void drawComboOptions(const Rect & rect, int numOptions, const char * options[], const Rect& ri, const Rect & rit, int selected, int hovered, bool isHover, bool isFocus, int style) = 0;
+        virtual Rect getComboRect(const Rect & r, int numOptions, const char * options[], int selected, Rect& rt, Rect& ra) const = 0;
+        virtual Rect getComboOptionsRect(const Rect & rCombo, int numOptions, const char * options[], Rect& ri, Rect & rit) const = 0;
+        virtual void drawComboBox(const Rect & rect, int numOptions, const char * options[], const Rect & rt, const Rect & ra, int selected, bool isHover, bool isFocus, int style) = 0;
+        virtual void drawComboOptions(const Rect & rect, int numOptions, const char * options[], const Rect& ri, const Rect & rit, int selected, int hovered, bool isHover, bool isFocus, int style) = 0;
 
-        NVSDKENTRY virtual Rect getLineEditRect(const Rect & r, const char * text, Rect & rt) const = 0;
-        NVSDKENTRY virtual void drawLineEdit(const Rect & r, const char * text, const Rect & rt, int caretPos, bool isSelected, bool isHover, int style) = 0;
+        virtual Rect getLineEditRect(const Rect & r, const char * text, Rect & rt) const = 0;
+        virtual void drawLineEdit(const Rect & r, const char * text, const Rect & rt, int caretPos, bool isSelected, bool isHover, int style) = 0;
 
-        NVSDKENTRY virtual Rect getPanelRect(const Rect & r, const char * text, Rect& rt, Rect& ra) const = 0;
-        NVSDKENTRY virtual void drawPanel(const Rect & rect, const char * text, const Rect & rt, const Rect & ra, bool isUnfold, bool isHover, bool isFocus, int style) = 0;
+        virtual Rect getPanelRect(const Rect & r, const char * text, Rect& rt, Rect& ra) const = 0;
+        virtual void drawPanel(const Rect & rect, const char * text, const Rect & rt, const Rect & ra, bool isUnfold, bool isHover, bool isFocus, int style) = 0;
 
-        NVSDKENTRY virtual Rect getTextureViewRect(const Rect & rect, Rect& rt) const = 0;
-        NVSDKENTRY virtual void drawTextureView(const Rect & rect, const void* texID, const Rect& rt, const Rect & rz, int mipLevel, 
-                                                float texelScale, float texelOffset, int r, int g, int b, int a, 
-                                                int style) = 0;
+        virtual Rect getTextureViewRect(const Rect & rect, Rect& rt) const = 0;
+        virtual void drawTextureView(const Rect & rect, const void* texID, const Rect& rt, const Rect & rz, int mipLevel, 
+                                     float texelScale, float texelOffset, int r, int g, int b, int a, 
+                                     int style) = 0;
 
         // Eval widget dimensions
-        NVSDKENTRY virtual int getCanvasMargin() const = 0;
-        NVSDKENTRY virtual int getCanvasSpace() const = 0;
-        NVSDKENTRY virtual int getFontHeight() const = 0;
-        NVSDKENTRY virtual int getTextLineWidth(const char * text) const = 0;
-        NVSDKENTRY virtual int getTextSize(const char * text, int& nbLines) const = 0;
-        NVSDKENTRY virtual int getPickedCharNb(const char * text, const Point& at) const = 0;
+        virtual int getCanvasMargin() const = 0;
+        virtual int getCanvasSpace() const = 0;
+        virtual int getFontHeight() const = 0;
+        virtual int getTextLineWidth(const char * text) const = 0;
+        virtual int getTextSize(const char * text, int& nbLines) const = 0;
+        virtual int getPickedCharNb(const char * text, const Point& at) const = 0;
 
-        NVSDKENTRY virtual void drawDebugRect(const Rect & r) = 0;
+        virtual void drawDebugRect(const Rect & r) = 0;
 
     protected:
     
-        NVSDKENTRY void init() {}
+        void init() {}
     };
 
 
-    class UIContext
+    class NVSDKENTRY UIContext
     {
     public:
-        NVSDKENTRY UIContext( UIPainter& painter );
+        UIContext( UIPainter& painter );
 
         //
         // UI method for processing window size events
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY void reshape(int w, int h);
+        void reshape(int w, int h);
        
         //
         // Check if the UI is currently on Focus
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY bool isOnFocus() const { return m_uiOnFocus; }
+        bool isOnFocus() const { return m_uiOnFocus; }
 
         //
         // UI method for processing mouse events
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY void mouse(int button, int state, int modifier, int x, int y);
-        NVSDKENTRY void mouse(int button, int state, int x, int y) { mouse( button, state, 0, x, y); }
+        void mouse(int button, int state, int modifier, int x, int y);
+        void mouse(int button, int state, int x, int y) { mouse( button, state, 0, x, y); }
  
         //
         // UI method for processing mouse motion events
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY void mouseMotion(int x, int y);
+        void mouseMotion(int x, int y);
 
         //
         // UI method for processing key events
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY void keyboard(unsigned char k, int x, int y);
+        void keyboard(unsigned char k, int x, int y);
 
         //
         // UI method for entering UI processing mode
         //
         //  This function must be used to begin the UI processing
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY void begin();
+        void begin();
 
         //
         // UI method for leaving UI processing mode
         //
         //  This function must be used to end the UI processing
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY void end();
+        void end();
 
         ////////////////////////////////////////////////////////////////////////////
         //
@@ -286,7 +286,7 @@ namespace nv
         // rect - optionally provides a location and size for the label
         // text - Text to display for the label (can have several lines)
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY void doLabel(const Rect & rect, const char * text, int style = 0);
+        void doLabel(const Rect & rect, const char * text, int style = 0);
 
         //
         // UI method for rendering and processing a push button
@@ -300,7 +300,7 @@ namespace nv
         //
         // @return  True if the button'state changed
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY bool doButton(const Rect & rect, const char * text, bool * state = NULL, int style = 0);
+        bool doButton(const Rect & rect, const char * text, bool * state = NULL, int style = 0);
         
         //
         // UI method for rendering and processing a check button
@@ -315,7 +315,7 @@ namespace nv
         //
         // @return  True if the check button'state changed
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY bool doCheckButton(const Rect & rect, const char * text, bool * state, int style = 0);
+        bool doCheckButton(const Rect & rect, const char * text, bool * state, int style = 0);
 
         //
         // UI method for rendering and processing a radio button
@@ -334,7 +334,7 @@ namespace nv
         //
         // @return  True if the radio button's value changed
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY bool doRadioButton(int reference, const Rect & r, const char * text, int * value, int style = 0);
+        bool doRadioButton(int reference, const Rect & r, const char * text, int * value, int style = 0);
 
         //
         // UI method for rendering and processing a horizontal slider
@@ -349,32 +349,32 @@ namespace nv
         //
         // @return  True if the slider's value changed
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY bool doHorizontalSlider(const Rect & rect, float min, float max, float * value, int style = 0);
+        bool doHorizontalSlider(const Rect & rect, float min, float max, float * value, int style = 0);
 
-        NVSDKENTRY bool doListItem(int index, const Rect & rect, const char * text, int * selected, int style = 0);
-        NVSDKENTRY bool doListBox(const Rect & rect, int numOptions, const char * options[], int * selected, int style = 0);
-        NVSDKENTRY bool doComboBox(const Rect & rect, int numOptions, const char * options[], int * selected, int style = 0);
+        bool doListItem(int index, const Rect & rect, const char * text, int * selected, int style = 0);
+        bool doListBox(const Rect & rect, int numOptions, const char * options[], int * selected, int style = 0);
+        bool doComboBox(const Rect & rect, int numOptions, const char * options[], int * selected, int style = 0);
 
-        NVSDKENTRY bool doLineEdit(const Rect & rect, char * text, int maxTextLength, int * nbCharsReturned, int style = 0);
+        bool doLineEdit(const Rect & rect, char * text, int maxTextLength, int * nbCharsReturned, int style = 0);
 
 
 
-        NVSDKENTRY void beginGroup(int groupFlags = GroupFlags_LayoutDefault, const Rect& rect = Rect::null);
-        NVSDKENTRY void endGroup();
+        void beginGroup(int groupFlags = GroupFlags_LayoutDefault, const Rect& rect = Rect::null);
+        void endGroup();
 
-        NVSDKENTRY void beginFrame(int groupFlags = GroupFlags_LayoutDefault, const Rect& rect = Rect::null, int style = 0);
-        NVSDKENTRY void endFrame();
+        void beginFrame(int groupFlags = GroupFlags_LayoutDefault, const Rect& rect = Rect::null, int style = 0);
+        void endFrame();
 
-        NVSDKENTRY bool beginPanel(Rect & rect, const char * text, bool * isUnfold, int groupFlags = GroupFlags_LayoutDefault, int style = 0);
-        NVSDKENTRY void endPanel();
+        bool beginPanel(Rect & rect, const char * text, bool * isUnfold, int groupFlags = GroupFlags_LayoutDefault, int style = 0);
+        void endPanel();
 
-        NVSDKENTRY int getGroupWidth() { return m_groupStack[m_groupIndex].bounds.w; }
-        NVSDKENTRY int getGroupHeight() { return m_groupStack[m_groupIndex].bounds.h; }
+        int getGroupWidth() { return m_groupStack[m_groupIndex].bounds.w; }
+        int getGroupHeight() { return m_groupStack[m_groupIndex].bounds.h; }
 
-        NVSDKENTRY int getCursorX() { return m_currentCursor.x;}
-        NVSDKENTRY int getCursorY() { return m_currentCursor.y;}
+        int getCursorX() { return m_currentCursor.x;}
+        int getCursorY() { return m_currentCursor.y;}
 
-        NVSDKENTRY const ButtonState& getMouseState( int button) { return m_mouseButton[button]; }
+        const ButtonState& getMouseState( int button) { return m_mouseButton[button]; }
 
         //
         // UI method for drawing a texture view
@@ -391,25 +391,25 @@ namespace nv
         // texelSwizzling - swizzle applyed to the texel (after scale and offset)
         // style - optional style flag to modify the look
         //////////////////////////////////////////////////////////////////
-        NVSDKENTRY void doTextureView(  const Rect & rect, const void* texID, Rect & zoomRect, int mipLevel = -1, 
-										float texelScale = 1.0f, float texelOffset = 1.0f, 
-										int red = 0, int green = 1, int blue = 2, int alpha = 3, 
-                                        int style = 0);
+        void doTextureView( const Rect & rect, const void* texID, Rect & zoomRect, int mipLevel = -1, 
+                            float texelScale = 1.0f, float texelOffset = 1.0f, 
+                            int red = 0, int green = 1, int blue = 2, int alpha = 3, 
+                            int style = 0);
 
     protected:
-        NVSDKENTRY UIPainter* getPainter() { return m_painter; }
+        UIPainter* getPainter() { return m_painter; }
 
         const Rect  & window() const { return m_window; }
 
     private:
-        NVSDKENTRY void setCursor(int x, int y);
+        void setCursor(int x, int y);
 
-        NVSDKENTRY static bool overlap(const Rect & rect, const Point & p);
+        static bool overlap(const Rect & rect, const Point & p);
 
-        NVSDKENTRY bool hasFocus(const Rect & rect);
-        NVSDKENTRY bool isHover(const Rect & rect);
+        bool hasFocus(const Rect & rect);
+        bool isHover(const Rect & rect);
 
-        NVSDKENTRY Rect placeRect(const Rect & r);
+        Rect placeRect(const Rect & r);
 
     private:
         UIPainter * m_painter;
@@ -431,9 +431,6 @@ namespace nv
     };
 
 };
-
-
-
 
 
 #endif  // NV_WIDGETS_H
