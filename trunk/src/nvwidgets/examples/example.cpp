@@ -37,7 +37,7 @@ void display()
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-	
+    
     doUI();
 
     glutSwapBuffers();
@@ -53,12 +53,12 @@ static void key(unsigned char k, int x, int y)
     ui.keyboard(k, x, y);
 
     switch (k)
-	{
-	    case 27:
-		case 'q':
-			exit(0);
-			break;
-	}
+    {
+        case 27:
+        case 'q':
+            exit(0);
+            break;
+    }
 }
 
 static void special(int key, int x, int y)
@@ -74,7 +74,7 @@ void resize(int w, int h)
     glViewport(0, 0, w, h);
     
     win_w = w;
-	win_h = h;
+    win_h = h;
 }
 
 static void mouse(int button, int state, int x, int y)
@@ -144,7 +144,7 @@ static void doUI()
     }
 
     // Pass non-ui mouse events to the manipulator
-	//updateManipulator(ui, manipulator);
+    //updateManipulator(ui, manipulator);
 
     ui.end();
 }
@@ -157,17 +157,17 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB);
     glutCreateWindow("UI example");
 
-	if (glewInit() != GLEW_OK)
-	{
-		printf("GLEW initialization failed\n");
-		return 0;
-	}
+    if (glewInit() != GLEW_OK)
+    {
+        printf("GLEW initialization failed\n");
+        return 0;
+    }
 
-	if (!ui.init())
-	{
+    if (!ui.init())
+    {
         printf("UI initialization failed\n");
         return 0;
-	}
+    }
 
     glEnable(GL_DEPTH_TEST);
     glClearColor(0, 0, 0, 1);

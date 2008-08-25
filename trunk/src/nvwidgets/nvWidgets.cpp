@@ -20,14 +20,14 @@ const Rect Rect::null;
 
 template <typename T> T min(const T & a, const T & b)
 {
-	if (a < b) return a;
-	return b;
+    if (a < b) return a;
+    return b;
 }
 
 template <typename T> T max(const T & a, const T & b)
 {
-	if (a > b) return a;
-	return b;
+    if (a > b) return a;
+    return b;
 }
 
 // Ctor.
@@ -348,7 +348,7 @@ bool UIContext::beginPanel(Rect & r, const char * text, bool * isUnfold, int fla
             rect.x += m_currentCursor.x - m_mouseButton[0].cursor.x;
             rect.y += m_currentCursor.y - m_mouseButton[0].cursor.y;
 
-            m_mouseButton[0].cursor	= m_currentCursor;
+            m_mouseButton[0].cursor    = m_currentCursor;
         }
 
         if (m_mouseButton[0].state & ButtonFlags_End && focus && overlap( Rect(rect.x + ra.x, rect.y + ra.y, ra.w, ra.h) , m_currentCursor))
@@ -561,21 +561,21 @@ bool UIContext::doComboBox(const Rect & r, int numOptions, const char * options[
             // Else Release the 2level focus when left mouse down out or up anyway
             // replace the stored left mouse down pos with the focus point to keep focus
             // on this widget for the next widget rendered in the frame
-            if (	!(hoverOptions || hover)	
-                &&	(	m_mouseButton[0].state & ButtonFlags_Begin
-                    ||	m_mouseButton[0].state & ButtonFlags_End))
+            if (!(hoverOptions || hover)
+                &&   (    m_mouseButton[0].state & ButtonFlags_Begin
+                    ||    m_mouseButton[0].state & ButtonFlags_End))
             {
                 m_twoStepFocus = false;
             }
             else if ( (hoverOptions || hover) && m_mouseButton[0].state & ButtonFlags_End)
             {
-                m_mouseButton[0].cursor	= m_focusPoint;		
+                m_mouseButton[0].cursor = m_focusPoint;
                 m_twoStepFocus = false;
             }
 
             if (hoverOptions && m_mouseButton[0].state & ButtonFlags_Begin)
             {
-                m_mouseButton[0].cursor	= m_focusPoint;		
+                m_mouseButton[0].cursor = m_focusPoint;
             }
         }
 
@@ -658,9 +658,9 @@ bool UIContext::doLineEdit(const Rect & r, char * text, int maxTextLength, int *
             // Else Release the 2level focus when left mouse down out or up anyway
             // replace the stored left mouse down pos with the focus point to keep focus
             // on this widget for the next widget rendered in the frame
-            if (	!(hover)	
-                &&	(	m_mouseButton[0].state & ButtonFlags_Begin
-                    ||	m_mouseButton[0].state & ButtonFlags_End))
+            if (!hover
+                &&   (    m_mouseButton[0].state & ButtonFlags_Begin
+                    ||    m_mouseButton[0].state & ButtonFlags_End))
             {
                 m_twoStepFocus = false;
                 m_focusCaretPos = -1;
@@ -668,7 +668,7 @@ bool UIContext::doLineEdit(const Rect & r, char * text, int maxTextLength, int *
 
             if (hover && m_mouseButton[0].state & ButtonFlags_Begin)
             {
-                m_mouseButton[0].cursor	= m_focusPoint;		
+                m_mouseButton[0].cursor = m_focusPoint;
             }
         }
 
@@ -737,7 +737,7 @@ bool UIContext::doLineEdit(const Rect & r, char * text, int maxTextLength, int *
                         } 
                         break;
                     }
-                }	
+                }
                 // Delete, move the chars >= carret back 1, carret stay in place
                 else if ( m_keyBuffer[keyNb] == 127 )
                 {
@@ -819,7 +819,7 @@ bool UIContext::isHover(const Rect & rect)
 
 
 void UIContext::doTextureView(const Rect & r, const void* texID, Rect & zoomRect, int mipLevel,
-							  float texelScale, float texelOffset, int red, int green, int blue, int alpha,
+                              float texelScale, float texelOffset, int red, int green, int blue, int alpha,
                               int style)
 {
     Rect rt;
