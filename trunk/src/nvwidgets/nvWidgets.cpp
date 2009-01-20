@@ -752,7 +752,7 @@ bool UIContext::doLineEdit(const Rect & r, char * text, int maxTextLength, int *
                 {
                     if (m_focusCaretPos > 0)
                     {
-                        if (m_focusCaretPos != textLength)
+                        if (m_focusCaretPos < textLength)
                         {
                             memmove( text + m_focusCaretPos - 1, text + m_focusCaretPos, textLength - m_focusCaretPos);
                         }
@@ -763,7 +763,7 @@ bool UIContext::doLineEdit(const Rect & r, char * text, int maxTextLength, int *
                 // Regular char, append it to the edited string
                 else if ( textLength < maxTextLength)
                 {
-                    if (m_focusCaretPos != textLength)
+                    if (m_focusCaretPos < textLength)
                     {
                         memmove( text + m_focusCaretPos + 1, text + m_focusCaretPos, textLength - m_focusCaretPos);
                     }
