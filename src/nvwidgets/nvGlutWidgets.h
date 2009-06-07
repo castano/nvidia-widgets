@@ -60,7 +60,7 @@ namespace nv
         // One time initialization
         //
         //////////////////////////////////////////////////////////////////
-        bool init();
+        bool init(int w, int h);
 
         //
         // UI method for processing GLUT mouse button events

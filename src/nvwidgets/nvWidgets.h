@@ -392,7 +392,7 @@ namespace nv
         // style - optional style flag to modify the look
         //////////////////////////////////////////////////////////////////
         void doTextureView( const Rect & rect, const void* texID, Rect & zoomRect, int mipLevel = -1, 
-                            float texelScale = 1.0f, float texelOffset = 1.0f, 
+                            float texelScale = 1.0f, float texelOffset = 0.0f, 
                             int red = 0, int green = 1, int blue = 2, int alpha = 3, 
                             int style = 0);
 

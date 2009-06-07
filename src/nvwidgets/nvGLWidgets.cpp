@@ -415,7 +415,7 @@ Rect GLUIPainter::getCheckRect(const Rect & r, const char * text, Rect & rt, Rec
 }
 
 void GLUIPainter::drawCheckButton(const Rect & r, const char * text, const Rect & rt, const Rect& rc, bool isChecked, bool isHover, bool isFocus, int style)
-{    
+{
     if (style) drawFrame( r, Point( rt.y, rt.y ), isHover, false, isFocus );
     drawBoolFrame( Rect(r.x+rc.x, r.y+rc.y, rc.w, rc.h), Point( rc.w/6, rc.h/6 ), isHover, isChecked, false );
     drawText( Rect(r.x+rt.x, r.y+rt.y, rt.w, rt.h) , text);
@@ -724,18 +724,16 @@ void GLUIPainter::drawTextureView(const Rect & rect, const void* texID, const Re
 {
     drawFrame( rect, Point(rt.x, rt.y), false, false, false );
 
-    GLuint lTexID = reinterpret_cast<GLuint> ( texID );
+    GLuint lTexID = *static_cast<const GLuint *> ( texID );
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, lTexID);
-    glColor3f(1.0f, 1.0f, 1.0f);    
 
     glUseProgram(m_textureViewProgram);
     glUniform1f( m_texMipLevelUniform, (float) mipLevel);
     glUniform1f( m_texelScaleUniform, texelScale);
     glUniform1f( m_texelOffsetUniform, texelOffset);
     glUniform4i( m_texelSwizzlingUniform, r, g, b, a);
-
 
     glBegin(GL_QUADS);
         glTexCoord2f( (float) rz.x / (float) rt.w , (float) rz.y / (float) rt.h);

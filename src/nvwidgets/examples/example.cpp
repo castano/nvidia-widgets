@@ -17,6 +17,7 @@ enum UIOption {
     OPTION_DXT5_YCOCG,
     OPTION_COMPRESS,
     OPTION_ANIMATE,
+	OPTION_THUMBNAIL,
     OPTION_COUNT
 };
 
@@ -28,6 +29,8 @@ static int win_w = 512, win_h = 512;
 
 static float errorScale = 4.0f;
 static float compressionRate = 0.0f;
+
+static GLuint texture = 0;
 
 static void doUI();
 
@@ -122,6 +125,15 @@ static void doUI()
             ui.endGroup();
         }
 
+        ui.doCheckButton(none, "Display dummy texture", &options[OPTION_THUMBNAIL]);
+		
+        if (options[OPTION_THUMBNAIL])
+        {
+            nv::Rect textureRect(0, 0, 100, 100);
+            
+            ui.doTextureView(textureRect, &texture, textureRect);
+        }
+
     ui.endGroup();
 
     if (options[OPTION_COMPRESS])
@@ -136,7 +148,7 @@ static void doUI()
             if (compressionRate != 0.0f)
             {
                 char text[256];
-                sprintf(text, "%.2f Mpixels/sec", 100);
+                sprintf(text, "%.2f Mpixels/sec", 100.0f);
                 ui.doLabel(none, text);
             }
 
@@ -163,12 +175,21 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    if (!ui.init())
+    if (!ui.init(win_w, win_h))
     {
         printf("UI initialization failed\n");
         return 0;
     }
+    glutReportErrors();    
 
+    unsigned int texture_data[] = {
+        0xFFFF0000, 0xFF0000FF, 
+        0xFF00FF00, 0xFF00FF00, 
+    };
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, 2, 2, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
+    
     glEnable(GL_DEPTH_TEST);
     glClearColor(0, 0, 0, 1);
 
