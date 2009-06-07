@@ -25,7 +25,7 @@
 using namespace nv;
 
 
-bool GlutUIContext::init()
+bool GlutUIContext::init(int w, int h)
 {
     // @@ Remove glew dependency. Load extensions explicitely and pass pointers to painter.
 
@@ -42,6 +42,8 @@ bool GlutUIContext::init()
     {
         return false;
     }
+	
+	reshape(w, h);
 
     return true;
 }
